@@ -68,9 +68,19 @@ public class TestXmlParser {
 		sXmlParser.removeStringMapFromFile(OUTPUT_OUTTER_DIR_ONE_FILE, stringMapByFile.keySet());
 	}
 	
-	@Test
+	//@Test
 	public void textUpdateStringMapInFile() throws JDOMException, IOException {
 		Map<String, Element> stringMapByFile = sXmlParser.getStringMapByFile(FAKE_MODEL_FILE);
 		sXmlParser.updateStringMapInFile(OUTPUT_OUTTER_DIR_ONE_FILE, stringMapByFile);
+	}
+	
+	@Test
+	public void testFormatStringMapInFile() throws JDOMException, IOException {
+		sXmlParser.formatStringMapInFile(TestDirs.FORMAT_FILE_1, TestDirs.FORMAT_MODEL_FILE);
+	}
+	
+	//@Test
+	public void test() throws JDOMException, IOException {
+		sXmlParser.test(TestDirs.FORMAT_MODEL_FILE);
 	}
 }

@@ -7,6 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.robust.Global;
+import com.robust.file.AndroidFileFilter;
+import com.robust.file.FlatFileFilter;
 import com.robust.manager.DiffManager;
 import com.robust.manager.ModifyManager;
 
@@ -23,8 +25,7 @@ public class TestModifyManager {
 	}
 	
 	@Test
-	public void removeUnusedForXmlDir() throws JDOMException, IOException {
-		sModifyManager.removeUnusedForXmlDir(TestDirs.OUTPUT_OUTTER_DIR, TestDirs.FAKE_MODEL_FILE);
+	public void testRemoveFromAndroidDir() throws JDOMException, IOException {
+		sModifyManager.removeUnused(TestDirs.OUTPUT_OUTTER_DIR, TestDirs.FAKE_MODEL_FILE, new FlatFileFilter());
 	}
-	
 }

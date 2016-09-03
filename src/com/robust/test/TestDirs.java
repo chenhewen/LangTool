@@ -16,4 +16,7 @@ public class TestDirs {
 	public static final File OUTPUT_OUTTER_DIR = new File(OUTPUT, "outter");
 	public static final File OUTPUT_OUTTER_DIR_ONE_FILE = new File(OUTPUT_OUTTER_DIR, "strings_cs.xml");
 	
+	public static final File FORMAT_DIR = new File (OUTPUT, "format");
+	public static final File FORMAT_MODEL_FILE = new File(FORMAT_DIR, "model.xml");
+	public static final File FORMAT_FILE_1 = new File(FORMAT_DIR, "format_1.xml");
 }

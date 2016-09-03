@@ -15,6 +15,7 @@ import com.robust.Const;
 import com.robust.Global;
 import com.robust.XmlParser;
 import com.robust.file.FileDealer;
+import com.robust.file.IFileFilter;
 
 public class ModifyManager {
 
@@ -30,33 +31,10 @@ public class ModifyManager {
 		mFileDealer = mGlobal.getFileDealer();
 	}
 
-	/*
-	 * public void modifyUnusedForAndroidDir(File srcFile, File unusedFile,
-	 * boolean delete) {
-	 * 
-	 * }
-	 * 
-	 * public void modifyUnusedForXMLDir(File srcFile, File unusedFile, boolean
-	 * delete) {
-	 * 
-	 * }
-	 */
-
-	public void removeUnusedForAndroidDir(File resourceDir, File unusedFile)
-			throws JDOMException, IOException {
-
-		File[] srcFiles = mFileDealer.getFiles(resourceDir, Const.REGEX_ANDROID_XML_NAME);
-		removeUnusedPrivate(srcFiles, unusedFile);
-	}
-
-	public void removeUnusedForXmlDir(File resourceDir, File unusedFile) throws JDOMException, IOException {
+	public void removeUnused(File rootDir, File unusedFile, IFileFilter filter) throws JDOMException, IOException {
 		
-		File[] srcFiles = mFileDealer.getFiles(resourceDir, Const.REGEX_XML_FILE);
-		removeUnusedPrivate(srcFiles, unusedFile);
+		File[] modifyFiles = mFileDealer.getFiles(rootDir, filter);
 		
-	}
-	
-	private void removeUnusedPrivate(File[] modifyFiles, File unusedFile) throws JDOMException, IOException {
 		Map<String, Element> stringMapByFile = mXmlParser.getStringMapByFile(unusedFile);
 		Set<String> keySet = stringMapByFile.keySet();
 		
