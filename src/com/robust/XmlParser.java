@@ -1,6 +1,7 @@
 package com.robust;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,18 +37,29 @@ public class XmlParser {
 		mSaxBuilder = saxBuilder;
 	}
 
-	public Map<String, Element> getStringMapByFile(File file) throws JDOMException, IOException {
+	public Map<String, Element> getStringMapByFile(File file) {
 		Map<String, Element> map = new LinkedHashMap<String, Element>();
 		if (file == null) {
 			return map;
 		}
 		
-		Document document = mSaxBuilder.build(file);
-		List<Element> elementList = document.getRootElement().getChildren();
+		Document document = null;
 		
-		for (Element e : elementList) {
-			map.put(e.getAttributeValue(Const.ATTR_NAME), e.clone());
+		try {
+			document = mSaxBuilder.build(file);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+
+		if (document != null) {
+			List<Element> elementList = document.getRootElement().getChildren();
+			for (Element e : elementList) {
+				map.put(e.getAttributeValue(Const.ATTR_NAME), e.clone());
+			}
+		}
+		
 		return map;
 	}
 	
@@ -69,11 +81,17 @@ public class XmlParser {
 	 * @throws JDOMException
 	 * @throws IOException
 	 */
-	public void setStringMapToFile(Map<String, Element> map, File file) throws JDOMException, IOException {
+	public void setStringMapToFile(Map<String, Element> map, File file) {
 		Document document = createEmptyXml();
 		document.getRootElement().setContent(map.values());
 		
-		mXmlOutputter.output(document, new FileOutputStream(file));
+		try {
+			mXmlOutputter.output(document, new FileOutputStream(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Element createStringElement(String key, String value) {
@@ -100,36 +118,59 @@ public class XmlParser {
 	 * @throws JDOMException
 	 * @throws IOException
 	 */
-	public void removeStringMapFromFile(File srcFile, Collection<String> unusedCollection) throws JDOMException, IOException {
-		Document document = mSaxBuilder.build(srcFile);
-		List<Element> elementList = document.getRootElement().getChildren();
-		List<Element> copyList = new ArrayList<Element>();
-		for (Element e : elementList){
-			copyList.add(e);
+	public void removeStringMapFromFile(File srcFile, Collection<String> unusedCollection) {
+		Document document = null;
+		try {
+			document = mSaxBuilder.build(srcFile);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		
-		Iterator<Element> iterator = copyList.iterator();
-		while (iterator.hasNext()) {
-			Element e = iterator.next();
-			if (unusedCollection.contains(e.getAttributeValue(Const.ATTR_NAME))) {
-				boolean success = document.getRootElement().removeContent(e);
-				if (success) {
-					Log.i("[" + srcFile.getName() + "]" + " element: " + e.getAttributeValue(Const.ATTR_NAME) + " remove success");
-				} else {
-					Log.i("[" + srcFile.getName() + "]" + " element: " + e.getAttributeValue(Const.ATTR_NAME) + " remove failed");
+		if (document != null) {
+			List<Element> elementList = document.getRootElement().getChildren();
+			List<Element> copyList = new ArrayList<Element>();
+			for (Element e : elementList){
+				copyList.add(e);
+			}
+			
+			Iterator<Element> iterator = copyList.iterator();
+			while (iterator.hasNext()) {
+				Element e = iterator.next();
+				if (unusedCollection.contains(e.getAttributeValue(Const.ATTR_NAME))) {
+					boolean success = document.getRootElement().removeContent(e);
+					if (success) {
+						Log.i("[" + srcFile.getName() + "]" + " element: " + e.getAttributeValue(Const.ATTR_NAME) + " remove success");
+					} else {
+						Log.i("[" + srcFile.getName() + "]" + " element: " + e.getAttributeValue(Const.ATTR_NAME) + " remove failed");
+					}
 				}
 			}
 		}
 		
+		
 		// TODO: finally close the FileOutputStream
-		mXmlOutputter.output(document, new FileOutputStream(srcFile));
+		try {
+			mXmlOutputter.output(document, new FileOutputStream(srcFile));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void  updateStringMapInFile(File srcFile, Map<String, Element> map) throws JDOMException, IOException {
+	public void  updateStringMapInFile(File srcFile, Map<String, Element> map) {
 		
 		Set<String> mapKeySet = map.keySet();
 		
-		Document document = mSaxBuilder.build(srcFile);
+		Document document = buildFileNotThrow(srcFile);
+		if (document == null) {
+			Log.e(srcFile.getAbsolutePath() + "build failed! action stops!");
+			return;
+		}
+		
+		
 		List<Element> elementList = document.getRootElement().getChildren();
 		for (int i = 0; i < elementList.size(); i++) {
 			Element e = elementList.get(i);
@@ -140,56 +181,71 @@ public class XmlParser {
 		}
 		
 		// TODO: finally close the FileOutputStream
-		mXmlOutputter.output(document, new FileOutputStream(srcFile));
+		try {
+			mXmlOutputter.output(document, new FileOutputStream(srcFile));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void formatStringMapInFile(File srcFile, File modelFile) throws JDOMException, IOException {
-		Document modelDocument = mSaxBuilder.build(modelFile);
-		List<Element> modelFileElementList = modelDocument.getRootElement().getChildren();
-		IteratorIterable<Content> modelIterator = modelDocument.getRootElement().getDescendants();
-		
-		Document srcDocument = mSaxBuilder.build(srcFile);
-		Element srcRootElement = srcDocument.getRootElement();
-		
-		Map<String, Element> srcFileStringMap = getStringMapByFile(srcFile);
-		
-		srcRootElement.removeContent();
-		/*for (Element element : modelFileElementList) {
-			String attributeValue = element.getAttributeValue(Const.ATTR_NAME);
-			Element srcElement = srcFileStringMap.get(attributeValue);
-			if (srcElement != null) {
-				srcRootElement.addContent(srcElement);
-			}
-		}*/
-		
-		while (modelIterator.hasNext()) {
-			Content next = modelIterator.next();
-			if (next instanceof Comment) {
-				srcRootElement.addContent(next.clone());
-			} else if (next instanceof Element) {
-				Element element = (Element) next;
-				String attributeValue = element.getAttributeValue(Const.ATTR_NAME);
-				Element srcElement = srcFileStringMap.get(attributeValue);
-				if (srcElement != null) {
-					srcRootElement.addContent(srcElement);
-				}
-			}
+	private Document buildFileNotThrow(File file) {
+		Document doc = null;
+		try {
+			 doc =  mSaxBuilder.build(file);
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-		// TODO: finally close the FileOutputStream
-		mXmlOutputter.output(srcDocument, new FileOutputStream(srcFile));
+		return doc;
 	}
 	
-	public void test(File modelFile) throws JDOMException, IOException {
-		Document modelDocument = mSaxBuilder.build(modelFile);
-		 IteratorIterable<Content> descendants = modelDocument.getRootElement().getDescendants();
-		 while (descendants.hasNext()) {
-			 Content next = descendants.next();
-			 System.out.println("next type: " + next.getCType());
-			 if (next instanceof Comment) {
-				 System.out.println("----next value " + ((Comment)next).getText());
-			 }
+	public void formatStringMapInFile(File srcFile, File modelFile) {
+		
+			Document modelDocument = buildFileNotThrow(modelFile);
+			Document srcDocument = buildFileNotThrow(srcFile);
 			
-		 }
+			if (modelDocument == null) {
+				Log.e(modelFile.getAbsolutePath() + " builds faild! action stops!");
+				return;
+			}
+			
+			if (srcDocument == null) {
+				Log.e(srcFile.getAbsolutePath() + " builds faild! action stops");
+				return;
+			}
+			
+			IteratorIterable<Content> modelIterator = modelDocument.getRootElement().getDescendants();
+			Element srcRootElement = srcDocument.getRootElement();
+			
+			Map<String, Element> srcFileStringMap = getStringMapByFile(srcFile);
+			
+			srcRootElement.removeContent();
+
+			while (modelIterator.hasNext()) {
+				Content next = modelIterator.next();
+				if (next instanceof Comment) {
+					srcRootElement.addContent(next.clone());
+				} else if (next instanceof Element) {
+					Element element = (Element) next;
+					String attributeValue = element.getAttributeValue(Const.ATTR_NAME);
+					Element srcElement = srcFileStringMap.get(attributeValue);
+					if (srcElement != null) {
+						srcRootElement.addContent(srcElement);
+					}
+				}
+			}
+			
+			// TODO: finally close the FileOutputStream
+			try {
+				mXmlOutputter.output(srcDocument, new FileOutputStream(srcFile));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 }

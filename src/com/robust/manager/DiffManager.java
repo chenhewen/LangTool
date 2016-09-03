@@ -44,61 +44,6 @@ public class DiffManager {
 	}
 
 	/**
-	 * deprecated. use {@link #createTranslationForCustomDir(File, File, File, File, boolean, IFileFilter)}
-	 * Create files for translation recursively for android standard resource
-	 * directory, which produces and changes "strings.xml" into the name of its
-	 * parent's dir. And store them in a one level deep dir.
-	 * 
-	 * @param resourceDir
-	 * @param outputDir
-	 * @param modelFile
-	 * @throws IOException
-	 * @throws JDOMException
-	 */
-	@Deprecated
-	public void createTranslationForAndroidDir(File resourceDir, File outputDir, File modelFile, File ignoreFile,
-			boolean onlyCopyModelFile) throws IOException, JDOMException {
-
-		checkArgs(resourceDir, outputDir, modelFile);
-		ensureDir(outputDir);
-
-		File[] srcFiles = mFileDealer.getFiles(resourceDir, Const.REGEX_ANDROID_XML_NAME);
-		for (int i = 0; i < srcFiles.length; i++) {
-			File srcFile = srcFiles[i];
-			File destFile = new File(outputDir, srcFile.getParentFile().getName() + Const.EXTENSION_ANDROID_XML);
-			createTranslation(srcFile, destFile, modelFile, ignoreFile, onlyCopyModelFile);
-		}
-	}
-
-	/**
-	 * deprecated. use {@link #createTranslationForCustomDir(File, File, File, File, boolean, IFileFilter)}
-	 * create files for translation recursively of all files which with
-	 * extension of ".xml", and name the production of the same one, which is
-	 * likely override previous one.
-	 * YOU ARE RESPONSIBLE FOR IT!
-	 * 
-	 * @param resourceDir
-	 * @param outputDir
-	 * @param modelFile
-	 * @throws IOException
-	 * @throws JDOMException
-	 */
-	@Deprecated
-	public void createTranslationForXMLDir(File resourceDir, File outputDir, File modelFile, File ignoreFile,
-			boolean onlyCopyModelFile) throws IOException, JDOMException {
-
-		checkArgs(resourceDir, outputDir, modelFile);
-		ensureDir(outputDir);
-
-		File[] srcFiles = mFileDealer.getFiles(resourceDir, Const.REGEX_XML_FILE);
-		for (int i = 0; i < srcFiles.length; i++) {
-			File srcFile = srcFiles[i];
-			File destFile = new File(outputDir, srcFile.getName());
-			createTranslation(srcFile, destFile, modelFile, ignoreFile, onlyCopyModelFile);
-		}
-	}
-	
-	/**
 	 * create files for translation recursively of all files which can be accepted by {@link IFileFilter.accept(File)}}
 	 * @param resourceDir
 	 * @param outputDir
@@ -110,7 +55,7 @@ public class DiffManager {
 	 * @throws JDOMException
 	 */
 	public void createTranslationForCustomDir(File resourceDir, File outputDir, File modelFile, File ignoreFile,
-			boolean onlyCopyModelFile, IFileFilter filter) throws IOException, JDOMException {
+			boolean onlyCopyModelFile, IFileFilter filter) {
 
 		checkArgs(resourceDir, outputDir, modelFile);
 		ensureDir(outputDir);
@@ -134,7 +79,7 @@ public class DiffManager {
 	 * @throws JDOMException
 	 */
 	public void createTranslation(File srcFile, File destFile, File modelFile, File ignoreFile,
-			boolean onlyCopyModelFile) throws IOException, JDOMException {
+			boolean onlyCopyModelFile) {
 
 		checkArgs(srcFile, destFile, modelFile);
 		ensureFile(destFile);

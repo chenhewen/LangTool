@@ -7,18 +7,13 @@ import com.robust.file.FlatFileFilter;
 import com.robust.file.IFileFilter;
 import com.robust.manager.DiffManager;
 
-public class DiffCmd extends BaseCmd {
+public class RetranCmd extends BaseCmd {
 
 	DiffManager mDiffManager = new DiffManager();
-
+	
 	@Override
-	public void run(String args[]) {
-		super.run(args);
-	}
+	public void onRun(String[] args) {
 
-	@Override
-	public void onRun(String[] args)  {
-		
 		String type = args[0];
 		IFileFilter filter = getFileFilterByType(type);
 		
@@ -27,11 +22,12 @@ public class DiffCmd extends BaseCmd {
 		File modelFile = new File(args[3]);
 		File ignoreFile = new File(args[4]);
 		
-		mDiffManager.createTranslationForCustomDir(resourceDir, outputDir, modelFile, ignoreFile, false, filter);
+		mDiffManager.createTranslationForCustomDir(resourceDir, outputDir, modelFile, ignoreFile, true, filter);
 	}
-
+	
 	@Override
 	public void getUsageInfo() {
-
+		super.getUsageInfo();
 	}
+
 }

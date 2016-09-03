@@ -31,33 +31,12 @@ public class TestDiffManager {
 		sDiffManager = new DiffManager();
 	}
 	
-	//@Test
 	public void testCreateTranslationForAndroidDir() throws IOException, JDOMException {
-		sDiffManager.createTranslationForAndroidDir(RESOURCE_DIR, OUTPUT_INNER_DIR, MODEL_FILE, null, false);
-	}
-	
-	//@Test
-	public void testCreateTranslationForAndroidDir2() throws IOException, JDOMException {
 		sDiffManager.createTranslationForCustomDir(RESOURCE_DIR, OUTPUT_INNER_DIR, MODEL_FILE, null, false, new AndroidFileFilter());
 	}
 	
-	//@Test
-	public void testCreateTranslationForXMLDir() throws IOException, JDOMException {
-		sDiffManager.createTranslationForXMLDir(OUTER_RESOURCE_DIR, OUTPUT_OUTTER_DIR, MODEL_FILE, null, false);
-	}
-	
 	@Test
-	public void testCreateTranslationForXMLDir2() throws IOException, JDOMException {
+	public void testCreateTranslationForXMLDir() throws IOException, JDOMException {
 		sDiffManager.createTranslationForCustomDir(OUTER_RESOURCE_DIR, OUTPUT_OUTTER_DIR, MODEL_FILE, null, false, new FlatFileFilter());
-	}
-	
-	//@Test
-	public void testCopyForAndroidDir() throws IOException, JDOMException {
-		sDiffManager.createTranslationForAndroidDir(RESOURCE_DIR, OUTPUT_INNER_DIR, MODEL_FILE, null, true);
-	}
-	
-	//@Test
-	public void testCopyFromXMLDir() throws IOException, JDOMException {
-		sDiffManager.createTranslationForXMLDir(OUTER_RESOURCE_DIR, OUTPUT_OUTTER_DIR, FAKE_MODEL_FILE, null, true);
 	}
 }

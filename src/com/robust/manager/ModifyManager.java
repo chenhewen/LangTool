@@ -31,7 +31,7 @@ public class ModifyManager {
 		mFileDealer = mGlobal.getFileDealer();
 	}
 
-	public void removeUnused(File rootDir, File unusedFile, IFileFilter filter) throws JDOMException, IOException {
+	public void removeUnused(File rootDir, File unusedFile, IFileFilter filter) {
 		
 		File[] modifyFiles = mFileDealer.getFiles(rootDir, filter);
 		
