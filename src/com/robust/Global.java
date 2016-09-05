@@ -32,7 +32,15 @@ public class Global {
 	public XmlParser getXmlParer() {
 		return mXmlParser;
 	}
+	
+	public static void rawFormatXmlOutputter(XMLOutputter xmlOutputter) {
+		xmlOutputter.setFormat(Format.getRawFormat().setExpandEmptyElements(true).setEncoding("UTF-8"));
+	}
 
+	public static void prettyFormatXmlOutputter(XMLOutputter xmlOutputter) {
+		xmlOutputter.setFormat(Format.getPrettyFormat().setExpandEmptyElements(true).setEncoding("UTF-8"));
+	}
+	
 	public SAXBuilder getSaxBuilder() {
 		return mSaxBuilder;
 	}
