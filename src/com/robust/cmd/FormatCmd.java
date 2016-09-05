@@ -22,8 +22,8 @@ public class FormatCmd extends BaseCmd {
 	}
 	
 	@Override
-	public void getUsageInfo() {
-		super.getUsageInfo();
+	public String getUsageInfo() {
+		return "format srcFile modelFile";
 	}
 
 }

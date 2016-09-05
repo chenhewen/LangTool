@@ -8,23 +8,23 @@ import com.robust.file.IFileFilter;
 
 public abstract class BaseCmd {
 
-	protected String[] mArgs;
-
 	public void run(String[] args) {
-		mArgs = args;
 		onRun(args);
 	}
 
 	public abstract void onRun(String[] args);
 
-	public void getUsageInfo() {
+	public abstract String getUsageInfo();
+	
+	public void printUsageInfo() {
+		System.out.println(getUsageInfo());
 	}
 	
 	protected IFileFilter getFileFilterByType(String type) {
 		IFileFilter filter = new FlatFileFilter();
 		if (type.equals("androidDir")) {
 			filter = new AndroidFileFilter();
-		} else if (type.equals("FlatDir")) {
+		} else if (type.equals("flatDir")) {
 			filter = new FlatFileFilter();
 		} else if (type.equals("singleFile")) {
 			filter = new FlatFileFilter();

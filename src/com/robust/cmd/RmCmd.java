@@ -14,14 +14,19 @@ public class RmCmd extends BaseCmd {
 		String type = args[0];
 		IFileFilter filter = getFileFilterByType(type);
 		
-		File rootDir = new File(args[1]);
+		File resourceDir = new File(args[1]);
 		File unusedFile = new File(args[2]);
-		mModifyManager.removeUnused(rootDir, unusedFile, filter);
+		mModifyManager.removeUnused(resourceDir, unusedFile, filter);
 	}
 
 	
 	@Override
 	protected IFileFilter getFileFilterByType(String type) {
 		return super.getFileFilterByType(type);
+	}
+	
+	@Override
+	public String getUsageInfo() {
+		return "rm [androidDir | flatDir | singleFile] resourceDir unusedFile";
 	}
 }

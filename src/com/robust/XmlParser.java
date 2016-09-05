@@ -170,13 +170,20 @@ public class XmlParser {
 			return;
 		}
 		
-		
 		List<Element> elementList = document.getRootElement().getChildren();
 		for (int i = 0; i < elementList.size(); i++) {
 			Element e = elementList.get(i);
 			String attributeValue = e.getAttributeValue(Const.ATTR_NAME);
+			
 			if (mapKeySet.contains(attributeValue)) {
-				e.setText(map.get(attributeValue).getText());
+				
+				String translation = map.get(attributeValue).getText();
+				if (StringUtils.isBlank(translation)) {
+					List<Content> children = map.get(attributeValue).removeContent();
+					e.setContent(children);
+				} else {
+					e.setText(translation);
+				}
 			}
 		}
 		

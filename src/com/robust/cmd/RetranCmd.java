@@ -14,20 +14,28 @@ public class RetranCmd extends BaseCmd {
 	@Override
 	public void onRun(String[] args) {
 
-		String type = args[0];
+		String type = getArg(args, 0);
 		IFileFilter filter = getFileFilterByType(type);
 		
-		File resourceDir = new File(args[1]);
-		File outputDir = new File(args[2]);
-		File modelFile = new File(args[3]);
-		File ignoreFile = new File(args[4]);
+		File resourceDir = new File(getArg(args, 1));
+		File outputDir = new File(getArg(args, 2));
+		File modelFile = new File(getArg(args, 3));
+		File ignoreFile = getArg(args, 4) == null ? null : new File(getArg(args, 4));
 		
 		mDiffManager.createTranslationForCustomDir(resourceDir, outputDir, modelFile, ignoreFile, true, filter);
 	}
 	
+	private String getArg(String[] args, int index) {
+		if (index >= args.length ) {
+			return null;
+		}
+		
+		return args[index];
+	}
+	
 	@Override
-	public void getUsageInfo() {
-		super.getUsageInfo();
+	public String getUsageInfo() {
+		return "retran [androidDir | flatDir | singleFile] resourceDir outputDir modelFile [ignoreFile]";
 	}
 
 }
