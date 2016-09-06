@@ -7,19 +7,19 @@ package com.robust;
  */
 public class Const {
 
-	//============标签===============
+	//============Tags===============
 	public static final String TAG_ROOT = "resources";
 	
 	public static final String TAG_STRING = "string";
 	
-	//============属性===============
+	//============Attributes===============
 	public static final String ATTR_NAME = "name";
 	
-	//============正则表达式===============
+	//============regular expressions===============
 	public static final String REGEX_ANDROID_XML_NAME = "strings.xml";
 	
 	public static final String REGEX_XML_FILE = ".*\\.xml";
 	
-	//============扩展名===============
+	//============extensions===============
 	public static final String EXTENSION_ANDROID_XML = ".xml";
 }
