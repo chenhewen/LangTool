@@ -17,7 +17,7 @@ public class FormatCmd extends BaseCmd {
 	@Override
 	public void onRun(String[] args) {
 		File srcFile = new File(args[0]);
-		File modelFile = new File(args[0]);
+		File modelFile = new File(args[1]);
 		mXmlParer.formatStringMapInFile(srcFile, modelFile);
 	}
 	
