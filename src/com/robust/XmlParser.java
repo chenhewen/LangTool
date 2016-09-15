@@ -19,6 +19,7 @@ import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Text;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.util.IteratorIterable;
@@ -234,23 +235,33 @@ public class XmlParser {
 			
 			srcRootElement.removeContent();
 
+			boolean hasBlank = false;
 			while (modelIterator.hasNext()) {
 				Content next = modelIterator.next();
 				if (next instanceof Comment) {
 					srcRootElement.addContent(next.clone());
+					hasBlank = false;
 				} else if (next instanceof Element) {
 					Element element = (Element) next;
 					String attributeValue = element.getAttributeValue(Const.ATTR_NAME);
 					Element srcElement = srcFileStringMap.get(attributeValue);
 					if (srcElement != null) {
 						srcRootElement.addContent(srcElement);
+						hasBlank = false;
+					}
+				} else if (next instanceof Text) {
+					String text = ((Text) next).getText();
+					boolean blank = StringUtils.isBlank(text);
+					if (blank && !hasBlank) {
+						srcRootElement.addContent(next.clone());
+						hasBlank = true;
 					}
 				}
 			}
 			
 			// TODO: finally close the FileOutputStream
 			try {
-				Global.prettyFormatXmlOutputter(mXmlOutputter);
+				Global.rawFormatXmlOutputter(mXmlOutputter);
 				mXmlOutputter.output(srcDocument, new FileOutputStream(srcFile));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

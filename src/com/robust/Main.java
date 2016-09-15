@@ -16,7 +16,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException, JDOMException {
 
-		/*String cmdline = "update G:/output/values.xml G:/output/values2.xml";
+		/*String cmdline = "format F:/AndroidStudioProjects/ZBoostAs/zBoost/src/main/res/values-zh-rCN/strings.xml F:/AndroidStudioProjects/ZBoostAs/zBoost/src/main/res/values/strings.xml";
 		args = cmdline.split(" ");*/
 		
 		int cmdAndArgsLength = args.length;

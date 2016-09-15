@@ -7,6 +7,8 @@ package com.robust;
  */
 public class Const {
 
+	public static final String INDENT_FOUR_SPACE = "    ";
+	
 	//============Tags===============
 	public static final String TAG_ROOT = "resources";
 	
